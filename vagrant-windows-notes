@@ -29,3 +29,7 @@ end
 
 Type vagrant up to download ubuntu & centos vagrant boxes:
 PS C:\User\bparinas> vagrant.exe up
+
+Check your virtualbox and ensure that Ubuntu is running.
+Next SSH to your Ubuntu vagrant box via Putty.
+Use vagrant/vagrant as your login credentials.
