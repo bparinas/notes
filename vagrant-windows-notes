@@ -1,0 +1,31 @@
+Software needed:
+1)vagrant -> https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1.msi
+2)virtualbox -> http://download.virtualbox.org/virtualbox/5.1.14/VirtualBox-5.1.14-112924-Win.exe
+3)atom editor -> https://atom.io/download/windows
+
+Open Powerscript Shell:
+PS C:\User\bparinas> mkdir vagrant-win
+PS C:\User\bparinas> vagrant.exe init
+
+Edit Vagrantfile and add the following lines (use the Host-Only Network IP Adressing in Virtualbox for vagrant boxes private IP assignment):
+Vagrant.configure("2") do |config|
+  config.vm.define "vm1" do |ctl|
+    ctl.vm.box = "ubuntu/trusty64"
+    ctl.vm.hostname = "ubuntusvr"
+    ctl.vm.network "private_network", ip: "192.168.201.2"
+    ctl.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+    end
+  end
+  config.vm.define "vm2" do |ctl|
+    ctl.vm.box = "centos/7"
+    ctl.vm.hostname = "centossvr"
+    ctl.vm.network "private_network", ip: "192.168.201.3"
+    ctl.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+    end
+  end
+end
+
+Type vagrant up to download ubuntu & centos vagrant boxes:
+PS C:\User\bparinas> vagrant.exe up
