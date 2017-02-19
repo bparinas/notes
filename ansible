@@ -1,0 +1,37 @@
+install ansible rhel6:
+yum install -y python34-setuptools.noarch
+/usr/bin/easy_install-3.4 pip
+yum install -y python34-devel.x86_64
+pip install ansible
+
+configure /etc/hosts file:
+192.168.201.2 server
+192.168.201.3 client1
+
+configure ansible:
+/etc/ansible/hosts
+[dev]
+client1
+
+create rhelpatch.yml playbook:
+---
+- hosts: dev
+  become_method: sudo
+  become_user: root
+
+  tasks:
+    - name: Update OS RHEL6
+      yum:
+        name: '*'
+        state: latest
+
+run "ansible-playbook rhelpatch.yml"
+
+
+@vagrant-master host
+$ ssh-keygen -t rsa -b 4096 -C "vagrant" (generate priv/pub key)
+$ ssh-copy-id vagrant@192.168.201.3 (copy public key to target host)
+$ ssh vagrant@192.168.201.3 (test passwordless connection to vagrant-client host)
+
+$ ansible -m ping client1 (test ping from vagrant-master to vagrant-client)
+$ ansible -m command -a "df -h" client1 (view vagrant-client disk space utilization) 
