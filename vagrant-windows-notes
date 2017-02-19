@@ -4,8 +4,8 @@ Software needed:
 3)atom editor -> https://atom.io/download/windows
 
 Open Powerscript Shell:
-PS C:\User\bparinas> mkdir vagrant-win
-PS C:\User\bparinas> vagrant.exe init
+PS C:\Users\bparinas> mkdir vagrant-win
+PS C:\Users\bparinas> vagrant.exe init
 
 Edit Vagrantfile and add the following lines (use the Host-Only Network IP Adressing in Virtualbox for vagrant boxes private IP assignment):
 Vagrant.configure("2") do |config|
@@ -33,3 +33,23 @@ PS C:\User\bparinas> vagrant.exe up
 Check your virtualbox and ensure that Ubuntu is running.
 Next SSH to your Ubuntu vagrant box via Putty.
 Use vagrant/vagrant as your login credentials.
+
+
+To destroy vagrant boxes:
+PS C:\Users\bparinas> vagrant status
+Current machine states:
+
+vm1             poweroff (virtualbox)
+vm2             poweroff (virtualbox)
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run `vagrant status NAME`.
+
+PS C:\Users\bparinas> vagrant destroy vm1
+    vm1: Are you sure you want to destroy the 'vm1' VM? [y/N] y
+==> vm1: Destroying VM and associated drives...
+PS C:\Users\bparinas> vagrant destroy vm2
+    vm2: Are you sure you want to destroy the 'vm2' VM? [y/N] y
+==> vm2: Destroying VM and associated drives...
+
