@@ -13,6 +13,10 @@ configure ansible:
 [dev]
 client1
 
+/etc/ansible/ansible.cfg
+[defaults]
+log_path=/var/log/ansible.log
+
 create rhelpatch.yml playbook:
 ---
 - hosts: dev
@@ -25,7 +29,7 @@ create rhelpatch.yml playbook:
         name: '*'
         state: latest
 
-run "ansible-playbook rhelpatch.yml"
+run "ansible-playbook -v rhelpatch.yml"
 
 
 @vagrant-master host
