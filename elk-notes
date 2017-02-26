@@ -1,0 +1,135 @@
+[ELK 5]
+
+Prerequisite:
+JDK8 and set $JAVA_HOME
+
+
+[[ELASTICSEARCH]]
+
+Download, extract and install Elasticsearch from source (tar.gz):
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.1.tar.gz
+tar xzvf elasticsearch-5.2.1.tar.gz
+
+Configure Elasticsearch:
+elasticsearch.yml (single node to multiple)
+=================
+cluster.name: global-elk
+node.name: global-es01
+network.host: 192.168.0.1
+
+adjust kernel param vm.max_map_count (increase memory mapping):
+sysctl -w vm.max_map_count=262144
+
+Start elasticsearch:
+./elasticsearch
+
+Verify elasticsearch:
+curl http://192.168.0.1:9200
+
+Autostart elasticsearch add to /etc/rc.local
+
+
+[[LOGSTASH]]
+
+Download, extract and install Logstash from source (tar.gz):
+wget https://artifacts.elastic.co/downloads/logstash/logstash-5.2.1.tar.gz
+tar xzvf logstash-5.2.1.tar.gz
+
+Quick test:
+./logstash -e 'input { stdin {} } output { elasticsearch { hosts => ["192.168.0.1:9200"] } }'
+
+Feed logs:
+This is a logstash test. Please ignore.
+
+curl -XGET http://192.168.0.1:9200/logstash-*/_search (return all documents)
+
+
+Start logstash:
+./logstash -f logstash.conf
+
+
+Autostart logstash add to /etc/rc.local
+
+
+[[KIBANA]]
+
+Download, extract and install Kibana from source (tar.gz):
+wget https://artifacts.elastic.co/downloads/kibana/kibana-5.2.1-linux-x86_64.tar.gz
+tar xzvf kibana-5.2.1-linux-x86_64.tar.gz
+
+
+Configure Kibana:
+kibana.yml
+==========
+server.host: "192.168.0.1"
+server.name: "global-kibana01"
+elasticsearch.url: "http://192.168.0.1:9200"
+
+
+Start kibana:
+./kibana
+
+
+Verify kibana (open browser):
+http://192.168.0.1:5601
+
+go to Management -> Add Index (configure an index pattern)
+set logstash-*
+set Time-field name "@timestamp"
+
+
+
+[[Filebeat]]
+Download, extract and install Filebeat from source (tar.gz):
+wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.2.1-linux-x86_64.tar.gz
+tar xzvf filebeat-5.2.1-linux-x86_64.tar.gz
+
+Configure filebeat.yml:
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /var/log/messages
+    - /var/log/secure
+  document_type: syslog
+
+tags: ["hostname", "server-role"]
+fields: 
+  env: staging
+
+output.logstash:
+  hosts: ["192.168.0.1:5044"]
+
+
+Configure logstash (beats.conf):
+input {
+    beats {
+        port => "5044"
+    }
+}
+
+filter {
+    if [type] == "syslog" {
+      grok {
+         match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} 
+
+%{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+      }
+      date {
+         match => [ "syslog_timestamp", "MMM d HH:mm:ss", "MMM dd HH:mm:ss" ]
+      } 
+    }
+}
+
+output {
+    elasticsearch {
+        host => ["192.168.0.1:9200"]
+        index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+        document_type => "%{[@metadata][type]}"
+    }
+}
+
+
+Load filebeat template to elasticsearch:
+curl -XPUT 'http://192.168.0.1:9200/_template/filebeat' -d@filebeat.template.json
+Start filebeat:
+./filebeat -e -c filebeat.yml
