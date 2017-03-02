@@ -20,6 +20,13 @@ network.host: 192.168.0.1
 adjust kernel param vm.max_map_count (increase memory mapping):
 sysctl -w vm.max_map_count=262144
 
+/etc/security/limits.conf
+<elk-procOwner>         hard    nproc   4096
+<elk-procOwner>         soft    nproc   4096
+<elk-procOwner>         hard    nofile  65536
+<elk-procOwner>         soft    nofile  65536
+
+
 Start elasticsearch:
 ./elasticsearch
 
