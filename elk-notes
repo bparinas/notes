@@ -16,6 +16,8 @@ elasticsearch.yml (single node to multiple)
 cluster.name: global-elk
 node.name: global-es01
 network.host: 192.168.0.1
+#(set bootstrap.system_call_filter to false. rhel6 do not support seccomp)
+bootstrap.system_call_filter: false 
 
 adjust kernel param vm.max_map_count (increase memory mapping):
 sysctl -w vm.max_map_count=262144
