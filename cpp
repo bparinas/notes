@@ -3,6 +3,7 @@ Compiler To Use: https://www.visualstudio.com/downloads/ (Visual Studio Communit
 
 
 //Guessing Number Game
+//covers stream I/O, local variable & flow control
 #include <iostream>
 using namespace std;
 
