@@ -165,3 +165,97 @@ int main() {
 		}
 	return 0;
 }
+
+
+//code covers vectors!
+// vector.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+//for sort and count
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	//declare vector templete int
+	vector<int> vInt;
+	for (int i = 0; i < 10; i++)
+	{
+		//push item onto the end of the vector
+		vInt.push_back(i);
+	}
+
+	//print content of vector vInt
+	for (auto item : vInt)
+	{
+		cout << item << " ";
+	}
+	cout << endl;
+
+	vector<string> vStr; //vector vStr scope will end after the return 0 bracket.
+	cout << "Enter three words ";
+	for (int i = 0; i < 3; i++) //int i scope after the for loop end bracket
+	{
+		string s;
+		cin >> s;
+		vStr.push_back(s);
+	}
+
+	for (auto item : vStr) //auto item scope after the for loop end bracket
+	{
+		cout << item << " ";
+	}
+	cout << endl;
+
+	//type safety example:
+	//string s = "CPP";
+	//vStr.push_back(s);
+	//vInt.push_back(s); //conversion error from std string to init
+
+	cout << "int vector vi has " << vInt.size() << " elements";
+	vInt[5] = 3;
+	vInt[6] = -1;
+	vInt[1] = 99;
+	cout << endl;
+
+	for (auto item : vInt)
+	{
+		cout << item << " ";
+	}
+	cout << endl;
+
+	for (unsigned int i = 0; i < vInt.size(); i++)
+	{
+		cout << vInt[i] << " ";
+	}
+	cout << endl;
+
+	for (auto i = begin(vInt); i != end(vInt); i++)
+	{
+		cout << *i << " ";
+	}
+	cout << endl;
+
+	sort(begin(vStr), end(vStr));
+	for (auto item : vStr)
+	{
+		cout << item << " ";
+	}
+	cout << endl;
+
+	int threes = count(begin(vInt), end(vInt), 9);
+	cout << "vector of ints has " << threes << " elements with value 9";
+	cout << endl;
+
+	int tees = count(begin(vStr[0]), end(vStr[0]), 't');
+	cout << "first word has " << tees << " letter t's";
+
+    return 0;
+}
+
