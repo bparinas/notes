@@ -124,3 +124,44 @@ double add(double a, double b, double c);
 bool test(bool x);
 bool test(double x);
 void test(void);
+
+
+
+
+// stringmanipulation.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <string>
+#include <iostream>
+using namespace std;
+
+int main() {
+	string firstWord;
+	string secondWord;
+
+	cout << "Welcome to my which is longer game." << endl;
+	cout << "User has to enter two words to play this game." << endl;
+	cout << "Enter the first word: ";
+	//cin >> firstWord;
+	//phrases with spaces
+	getline(cin, firstWord);
+	cout << "Enter the second word: ";
+	//cin >> secondWord;
+	//phrases with spaces
+	getline(cin, secondWord);
+
+		if (firstWord.length() > secondWord.length())
+		{
+			cout << firstWord + " is longer." << endl;
+		}
+		if (firstWord.length() < secondWord.length())
+		{
+			cout << secondWord + " is longer." << endl;
+		}
+		if (firstWord.length() == secondWord.length())
+		{
+			cout << "They are the same length." << endl;
+		}
+	return 0;
+}
