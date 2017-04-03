@@ -1,0 +1,10 @@
+Error: 
+dpkg: error cannot get security labeling handle: No such file or directory
+Solution:
+apt update
+apt upgrade
+mount -o remount,ro /sys/fs/selinux
+apt upgrade
+apt -f install
+apt install <pkg>
+mount -o remount,rw /sys/fs/selinux
