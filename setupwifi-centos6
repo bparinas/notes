@@ -30,6 +30,9 @@ INTERFACES="iwlan0"
 DRIVERS="-Dwext"
 OTHER_ARGS="-u -f /var/log/wpa_supplicant.log -P /var/run/wpa_supplicant.pid -t"
 
+generate passphrase
+===================
+wpa_passphrase [essid] [password] >> /etc/wpa_supplicant/wpa_supplicant.conf
 
 /etc/wpa_supplicant/wpa_supplicant.conf
 =======================================
