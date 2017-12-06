@@ -1,0 +1,66 @@
+initial checks
+==============
+iw dev
+ip link show wlan0
+ip link set wlan0 up
+ip link show wlan0
+iwlist wlan0 scanning
+
+
+/etc/sysconfig/network-scripts/ifcfg-wlan0
+==========================================
+DEVICE=wlan0
+BOOTPROTO=dhcp
+HWADDR=00:1E:2A:C1:8B:16
+NM_CONTROLLED=no
+ESSID=scolsuckz
+SEURITYMODE=on
+RATE=auto
+RTS=auto
+FRAG=auto
+MODE=Managed
+ONBOOT=yes
+TYPE=Wireless
+WPA=yes
+
+
+/etc/sysconfig/wpa_supplicant
+=============================
+INTERFACES="iwlan0"
+DRIVERS="-Dwext"
+OTHER_ARGS="-u -f /var/log/wpa_supplicant.log -P /var/run/wpa_supplicant.pid -t"
+
+
+/etc/wpa_supplicant/wpa_supplicant.conf
+=======================================
+network={
+	ssid="scolsuckz"
+	scan_ssid=1
+	key_mgmt=WPA-PSK
+	psk=501044b126710d300d710a037152817d371c2e4d9f974c1248662e0bb385edde
+}
+
+start wifi via script (/opt/contrib/wifi)
+=========================================
+#!/bin/bash
+#provide wifi credentials
+wpa_supplicant -B -D wext -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+#get ip from dhcp
+ifup wlan0
+
+
+check wifi status
+=================
+iw wlan0 link
+
+
+/etc/rc.local
+=============
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+/opt/contrib/wifi
